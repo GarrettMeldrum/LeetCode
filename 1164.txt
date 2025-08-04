@@ -1,0 +1,8 @@
+select pd.product_id, ifnull(prc.new_price,10) as 'price' from (select distinct product_id from Products) pd
+left join (
+    select product_id, max(change_date) as 'max_date' from Products where change_date <= '2019-08-16' group by product_id
+) chgdate on pd.product_id = chgdate.product_id
+left join (
+    select product_id, change_date, new_price from Products
+) prc on pd.product_id = prc.product_id and chgdate.max_date = prc.change_date
+order by pd.product_id, price asc;

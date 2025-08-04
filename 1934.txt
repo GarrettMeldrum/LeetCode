@@ -1,0 +1,13 @@
+select 
+    s.user_id, 
+    round(coalesce(confirmed_count / nullif(all_count,0),0),2) as 'confirmation_rate'
+from 
+    Signups s
+left join (
+        select 
+            user_id,
+            count(case when action = 'confirmed' then 1 end) as 'confirmed_count',
+            count(time_stamp) as 'all_count'
+        from Confirmations
+        group by user_id
+) as c on s.user_id = c.user_id

@@ -1,0 +1,11 @@
+select 
+    id,
+    movie,
+    description,
+    rating
+from
+    Cinema c
+where 
+    description <> 'boring'
+    and id in (select id from Cinema where id % 2 <> 0)
+order by rating desc;
